@@ -10,6 +10,28 @@ paper Fully Convolutional Networks for Semantic Segmentation.
 
 import numpy as np
 
+
+def eval_with_out_put(eval_array, gt_array):
+
+    pixel_accuracy_ = []
+    mean_accuracy_ = []
+    mean_IU_ = []
+    frequency_weighted_IU_ = []
+
+    for i in range(len(eval_array)):
+        g = np.array(Image.open(eval_array[i]))
+        p = np.array(Image.open(gt_array[i]))
+        
+        pixel_accuracy_.append(pixel_accuracy(g,p))
+        mean_accuracy_.append(mean_accuracy(g,p))
+        mean_IU_.append(mean_IU(g,p))
+        frequency_weighted_IU_.append(frequency_weighted_IU(g,p))
+        
+    print("pixel_accuracy :        %",  round(np.mean(np.array(pixel_accuracy_       )),3))
+    print("mean_accuracy  :        %",  round(np.mean(np.array(mean_accuracy_        )),3))
+    print("mean_IU :               %",  round(np.mean(np.array(mean_IU_              )),3))
+    print("frequency_weighted_IU : %",  round(np.mean(np.array(frequency_weighted_IU_)),3))
+
 def pixel_accuracy(eval_segm, gt_segm):
     '''
     sum_i(n_ii) / sum_i(t_i)
