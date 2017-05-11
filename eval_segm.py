@@ -9,9 +9,10 @@ paper Fully Convolutional Networks for Semantic Segmentation.
 '''
 
 import numpy as np
+from PIL import Image
 
 
-def eval_with_out_put(eval_array, gt_array):
+def eval_with_report(eval_array, gt_array):
 
     pixel_accuracy_ = []
     mean_accuracy_ = []
@@ -26,12 +27,38 @@ def eval_with_out_put(eval_array, gt_array):
         mean_accuracy_.append(mean_accuracy(g,p))
         mean_IU_.append(mean_IU(g,p))
         frequency_weighted_IU_.append(frequency_weighted_IU(g,p))
-        
-    print("pixel_accuracy :        %",  round(np.mean(np.array(pixel_accuracy_       )),3))
-    print("mean_accuracy  :        %",  round(np.mean(np.array(mean_accuracy_        )),3))
-    print("mean_IU :               %",  round(np.mean(np.array(mean_IU_              )),3))
-    print("frequency_weighted_IU : %",  round(np.mean(np.array(frequency_weighted_IU_)),3))
 
+    print("                        Mean    |   Average  |  STD      |  Median")   
+    print("-----------------------------------------------------------------")    
+    print("pixel_accuracy :        % {0}  |  % {1}  |  % {2}  |  % {3}".format(mean(pixel_accuracy_)       ,average(pixel_accuracy_)       ,std(pixel_accuracy_)       ,median(pixel_accuracy_)) )
+    print("mean_accuracy  :        % {0}  |  % {1}  |  % {2}  |  % {3}".format(mean(mean_accuracy_)        ,average(mean_accuracy_)        ,std(mean_accuracy_)        ,median(mean_accuracy_))  )
+    print("mean_IU :               % {0}  |  % {1}  |  % {2}  |  % {3}".format(mean(mean_IU_)              ,average(mean_IU_)              ,std(mean_IU_)              ,median(mean_IU_)) )
+    print("frequency_weighted_IU : % {0}  |  % {1}  |  % {2}  |  % {3}".format(mean(frequency_weighted_IU_),average(frequency_weighted_IU_),std(frequency_weighted_IU_),median(frequency_weighted_IU_)) )
+
+
+def mean(list_t):
+    num = str(round(round(np.mean(np.array(list_t)),4)*100,2))
+    return pritty_percent(num)
+
+def average(list_t):
+    num = str(round(round(np.average(np.array(list_t)),4)*100,2))
+    return pritty_percent(num)
+
+def std(list_t):
+    num = str(round(round(np.std(np.array(list_t)),4)*100,2))
+    return pritty_percent(num)
+
+def median(list_t):
+    num = str(round(round(np.median(np.array(list_t)),4)*100,2))
+    return pritty_percent(num)
+
+def pritty_percent(num):
+    if len(num) == 4 and num[2] != '.':
+        num = "0" + num
+
+    if len(num) == 4 and num[2] == '.':
+        num =  num + "0"
+    return num
 def pixel_accuracy(eval_segm, gt_segm):
     '''
     sum_i(n_ii) / sum_i(t_i)
